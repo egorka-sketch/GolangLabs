@@ -14,7 +14,7 @@ func (r Rectangle) getArea() float64 {
 }
 func setArea() Rectangle {
 	var width, height float64
-	fmt.Print("Введите ширину и высоту через пробел: ")
+	fmt.Print("\nЗадание 5\nВведите ширину и высоту через пробел: ")
 	fmt.Scan(&width, &height)
 	return Rectangle{
 		width:  width,
@@ -25,7 +25,7 @@ func setArea() Rectangle {
 
 func determinantParity() string {
 	var number int
-	fmt.Print("Задние 1\nВедите число : ")
+	fmt.Print("Задание 1\nВедите число : ")
 	fmt.Scan(&number)
 	if number%2 == 0 {
 		return "Четное"
@@ -37,7 +37,7 @@ func determinantParity() string {
 
 func determinantNumber() string {
 	var number int
-	fmt.Print("\nЗадние 2\nВведите число : ")
+	fmt.Print("\nЗадание 2\nВведите число : ")
 	fmt.Scan(&number)
 	if number > 0 {
 		return "Positive"
@@ -68,7 +68,7 @@ func determinantLength() {
 
 func average() float64 {
 	var a, b int
-	fmt.Print("\nВведите a и b через пробел : ")
+	fmt.Print("\nЗадание 6\nВведите a и b через пробел : ")
 	fmt.Scan(&a, &b)
 	return float64(a+b) / 2
 }

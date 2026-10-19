@@ -12,7 +12,8 @@ func Time(t time.Time) string {
 }
 
 func Variables() (float64, string, bool) {
-	a := 64.35
+	var a float64
+	a = 64.35
 	b := "eqfqdfw"
 	isTrue := false
 	return a, b, isTrue

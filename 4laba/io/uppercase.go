@@ -12,7 +12,7 @@ func Uppercase() {
 	reader := bufio.NewReader(os.Stdin)
 	line, err := reader.ReadString('\n')
 	if err != nil {
-		panic(err)
+		return
 	}
 	line = strings.TrimSpace(line)
 	fmt.Println("Строка в верхнем регистре: ", strings.ToUpper(line))
