@@ -6,6 +6,7 @@ import (
 	"6laba/goroutines"
 	"6laba/mutex"
 	"6laba/selector"
+	"6laba/worker"
 	"fmt"
 )
 
@@ -16,4 +17,5 @@ func main() {
 	mutex.RunGoroutines()
 	fmt.Print("\nЗадание 5\n")
 	calculator.Run()
+	worker.Run()
 }

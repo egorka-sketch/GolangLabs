@@ -7,7 +7,7 @@ import (
 
 func CounterOutMutex(wg *sync.WaitGroup, counter *int) {
 	defer wg.Done()
-	iterations := 1000
+	iterations := 100000
 
 	for i := 0; i < iterations; i++ {
 		*counter++
@@ -17,7 +17,7 @@ func CounterOutMutex(wg *sync.WaitGroup, counter *int) {
 
 func CounterMutex(wg *sync.WaitGroup, mu *sync.Mutex, counter *int) {
 	defer wg.Done()
-	iterations := 1000
+	iterations := 100000
 
 	for i := 0; i < iterations; i++ {
 		mu.Lock()
@@ -37,11 +37,11 @@ func RunGoroutines() {
 	}
 	wg1.Wait()
 	fmt.Print("Задание 4\n")
-	fmt.Println("Без мьютекса из 10000 насчитано: ", counter1)
+	fmt.Println("Без мьютекса из 1000000 насчитано: ", counter1)
 	wg2.Add(10)
 	for i := 0; i < 10; i++ {
 		go CounterMutex(&wg2, &mu, &counter2)
 	}
 	wg2.Wait()
-	fmt.Println("С мьютексом из 10000 насчитано: ", counter2)
+	fmt.Println("С мьютексом из 1000000 насчитано: ", counter2)
 }
