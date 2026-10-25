@@ -14,6 +14,7 @@ func handle(conn net.Conn) {
 		msg := sc.Text()
 		log.Printf("Сообщение %s от %v", msg, conn.RemoteAddr())
 		fmt.Fprintln(conn, "Сообщение принято:", msg)
+		log.Printf("ответ отправлен %v", conn.RemoteAddr())
 	}
 	if err := sc.Err(); err != nil {
 		log.Printf("%v Сбой при приеме сообщения %v", conn.RemoteAddr(), err)
