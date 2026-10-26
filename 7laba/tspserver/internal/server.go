@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"net"
+	"sync"
 )
 
 type Server struct {
@@ -21,6 +22,7 @@ func (s *Server) Run(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	var wg sync.WaitGroup
 	defer ln.Close()
 
 	log.Println("Слушаю порт", s.addr)
@@ -33,12 +35,17 @@ func (s *Server) Run(ctx context.Context) error {
 		conn, err := ln.Accept()
 		if err != nil {
 			if errors.Is(err, net.ErrClosed) {
-				return nil
+				break
 			}
 			log.Println(err)
 			continue
 		}
 		log.Println("Подключился", conn.RemoteAddr())
-		go handle(conn)
+		wg.Go(func() {
+			handle(ctx, conn)
+		})
 	}
+	wg.Wait()
+	log.Println("Сервер остановлен")
+	return nil
 }
