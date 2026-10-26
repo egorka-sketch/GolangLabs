@@ -19,9 +19,10 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /hello", internal.HelloHandler)
 	mux.HandleFunc("POST /data", internal.DataHandler)
+	mux.HandleFunc("GET /status/{user}", internal.StatusHandler)
 	server := &http.Server{
 		Addr:    ":8080",
-		Handler: mux,
+		Handler: internal.Logger(mux),
 	}
 	wg.Go(func() {
 		<-ctx.Done()
