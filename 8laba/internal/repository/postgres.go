@@ -87,3 +87,15 @@ func (ur *UserRepo) Delete(ctx context.Context, id int) error {
 	}
 	return nil
 }
+
+func NewPool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
+	pool, err := pgxpool.New(ctx, dsn)
+	if err != nil {
+		return nil, fmt.Errorf("ошибка создания : %w", err)
+	}
+	if err = pool.Ping(ctx); err != nil {
+		pool.Close()
+		return nil, fmt.Errorf("нет соединения с базой: %w", err)
+	}
+	return pool, nil
+}
