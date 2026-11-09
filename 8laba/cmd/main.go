@@ -25,6 +25,10 @@ func main() {
 	h := handler.NewHandler(repo)
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /users", h.HandleGetAll)
+	mux.HandleFunc("GET /users/{id}", h.HandleGetById)
+	mux.HandleFunc("POST /users", h.CreateUser)
+	mux.HandleFunc("PUT /users/{id}", h.UpdateUser)
+	mux.HandleFunc("DELETE /users/{id}", h.DeleteUser)
 	server := &http.Server{
 		Addr:              ":8080",
 		Handler:           mux,

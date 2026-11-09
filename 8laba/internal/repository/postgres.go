@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"strings"
+	"time"
 )
 
 type UserRepo struct {
@@ -21,8 +23,31 @@ func NewRepo(pool *pgxpool.Pool) *UserRepo {
 	return db
 }
 
-func (ur *UserRepo) GetAll(ctx context.Context) ([]User, error) {
-	rows, err := ur.pool.Query(ctx, "SELECT * FROM users")
+func (ur *UserRepo) GetAll(ctx context.Context, filter UserFilter) ([]User, error) {
+	query := "SELECT id,name,birth_day FROM users"
+	var conds []string
+	var args []any
+	if filter.Name != "" {
+		args = append(args, "%"+filter.Name+"%")
+		conds = append(conds, fmt.Sprintf("name ILIKE $%d", len(args)))
+	}
+	today := time.Now().UTC().Truncate(24 * time.Hour)
+	if filter.MinAge >= 0 {
+		args = append(args, today.AddDate(-filter.MinAge, 0, 0))
+		conds = append(conds, fmt.Sprintf("birth_day <= $%d", len(args)))
+	}
+	if filter.MaxAge >= 0 {
+		args = append(args, today.AddDate(-(filter.MaxAge+1), 0, 0))
+		conds = append(conds, fmt.Sprintf("birth_day > $%d", len(args)))
+	}
+	if len(conds) > 0 {
+		query += " WHERE " + strings.Join(conds, " AND ")
+	}
+	args = append(args, filter.Limit)
+	query += fmt.Sprintf(" ORDER BY id LIMIT $%d", len(args))
+	args = append(args, filter.Offset)
+	query += fmt.Sprintf(" OFFSET $%d", len(args))
+	rows, err := ur.pool.Query(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("ошибка вывода: %w", err)
 	}
