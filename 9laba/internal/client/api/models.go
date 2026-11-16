@@ -18,3 +18,14 @@ type ListFilter struct {
 	MinAge *int
 	MaxAge *int
 }
+
+type Account struct {
+	ID    int    `json:"id"`
+	Login string `json:"login"`
+	Role  string `json:"role"`
+}
+
+type Credentials struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}

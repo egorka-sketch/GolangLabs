@@ -15,6 +15,7 @@ type Menu struct {
 	client *api.Client
 	in     *bufio.Scanner
 	ctx    context.Context
+	login  string
 }
 
 func NewMenu(c *api.Client, in io.Reader) *Menu {
@@ -33,9 +34,17 @@ func (m *Menu) Run() {
 		{"3", "Добавить", m.create},
 		{"4", "Изменить", m.update},
 		{"5", "Удалить", m.delete},
+		{"6", "Регистрация", m.register},
+		{"7", "Вход", m.signIn},
+		{"8", "Выход из аккаунта", m.signOut},
 	}
 	for {
 		fmt.Println("\nПользователи")
+		if m.client.LoggedIn() {
+			fmt.Printf("Вы вошли как %s\n", m.login)
+		} else {
+			fmt.Println("Вы не вошли")
+		}
 		for _, it := range items {
 			fmt.Printf("%s. %s\n", it.key, it.title)
 		}

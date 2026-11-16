@@ -14,6 +14,7 @@ import (
 type Client struct {
 	baseURL string
 	http    *http.Client
+	token   string
 }
 
 func New(baseURL string) *Client {
@@ -39,6 +40,9 @@ func (c *Client) do(ctx context.Context, method, path string, in, out any) error
 	}
 	if in != nil {
 		req.Header.Set("Content-Type", "application/json")
+	}
+	if c.token != "" {
+		req.Header.Set("Authorization", "Bearer "+c.token)
 	}
 
 	resp, err := c.http.Do(req)

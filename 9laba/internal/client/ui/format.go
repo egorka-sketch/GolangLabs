@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"net/http"
 	"os"
 	"text/tabwriter"
 	"time"
@@ -57,6 +58,8 @@ func printErr(err error) {
 	var apiErr *api.APIError
 	var netErr net.Error
 	switch {
+	case errors.As(err, &apiErr) && apiErr.StatusCode == http.StatusUnauthorized:
+		fmt.Printf("Ошибка 401: %s. Войдите в аккаунт\n", apiErr.Message)
 	case errors.As(err, &apiErr):
 		fmt.Printf("Ошибка %d: %s\n", apiErr.StatusCode, apiErr.Message)
 	case errors.As(err, &netErr) && netErr.Timeout():
