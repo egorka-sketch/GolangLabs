@@ -16,11 +16,11 @@ func Run(baseURL, login, password string, workers, iterations int) {
 	fail := func(worker int, err error) {
 		failed.Add(1)
 		firstErr.Do(func() {
-			fmt.Printf("Первая ошибка (клиент %d): %v\n", worker, err)
+			fmt.Printf("Ошибка: клиент %d: %v\n", worker, err)
 		})
 	}
 
-	fmt.Printf("Запуск: %d клиентов по %d итераций\n", workers, iterations)
+	fmt.Printf("Запуск: %d пользователей по %d итераций\n", workers, iterations)
 	start := time.Now()
 
 	var wg sync.WaitGroup
@@ -60,7 +60,6 @@ func Run(baseURL, login, password string, workers, iterations int) {
 
 	elapsed := time.Since(start)
 	total := ok.Load() + failed.Load()
-	fmt.Printf("Готово за %v\n", elapsed.Round(time.Millisecond))
-	fmt.Printf("Операций: %d, успешных: %d, ошибок: %d\n", total, ok.Load(), failed.Load())
-	fmt.Printf("Скорость: %.0f операций/с\n", float64(total)/elapsed.Seconds())
+	fmt.Printf("Время выполнения %v\n", elapsed.Round(time.Millisecond))
+	fmt.Printf("Операций: %d ошибок: %d\n", total, failed.Load())
 }
